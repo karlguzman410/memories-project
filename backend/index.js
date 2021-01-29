@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import cors from 'cors'
+import postRoutes from './routes/posts.js'
 
 const app = express()
 
@@ -14,6 +15,11 @@ app.use(cors())
 
 //mongodb.com/cloud/atlas
 //establish the connection to the db
+
+//use express middleware to connect to application
+//1st param, set up starting path for all the routes inside postjs
+//every route inside of postRoutes will start with 'posts'
+app.use('/posts', postRoutes)
 
 const CONNECTION_URL = 'mongodb+srv://kguzman0410:kguzman0410123@cluster0.pxqwe.mongodb.net/<dbname>?retryWrites=true&w=majority'
 

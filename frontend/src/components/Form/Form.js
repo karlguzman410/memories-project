@@ -1,12 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import useStyles from './styles'
 import { TextField, Button, Typography, Paper } from '@material-ui/core'
 import FileBase from 'react-file-base64'
 import { useDispatch } from 'react-redux'
 import { createPost } from '../../actions/posts'
+import { updatePost } from '../../actions/posts'
+import { useSelector } from 'react-redux'
 
-const Form = () => {
+//Get the current ID of the post
+
+
+const Form = ({ currentId, setCurrentId }) => {
     const classes = useStyles()
+
+    const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null)
+
+    console.log(currentId)
 
     const [postData, setPostData] = useState({
         creator: '',
@@ -16,21 +25,39 @@ const Form = () => {
         selectedFile: ''
     })
 
+    useEffect(() => {
+        if (post) setPostData(post)
+        console.log(post)
+    }, [post])
+
     const dispatch = useDispatch()
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        dispatch(createPost(postData))
+
+        if (currentId) {
+            dispatch(updatePost(currentId, postData))
+        } else {
+            dispatch(createPost(postData))
+        }
+        clear()
     }
 
     const clear = () => {
-        setPostData({})
+        setCurrentId(null)
+        setPostData({
+            creator: '',
+            title: '',
+            message: '',
+            tags: '',
+            selectedFile: ''
+        })
     }
 
     return (
         <Paper className={classes.paper}>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
-                <Typography variant="h6"> Creating a memory </Typography>
+                <Typography variant="h6"> {currentId ? 'Editing a memory' : 'Creating a memory'} </Typography>
                 <TextField
                     name="creator"
                     variant="outlined"
@@ -63,6 +90,7 @@ const Form = () => {
                     <FileBase
                         type="file"
                         multiple={false}
+                        isRequired
                         onDone={({ base64 }) => setPostData({ ...postData, selectedFile: base64 })}
                     />
                     <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>

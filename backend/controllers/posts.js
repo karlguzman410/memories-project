@@ -1,6 +1,5 @@
 //handler for our routes
 import mongoose from 'mongoose'
-import Post from '../../frontend/src/components/Posts/Post/Post.js'
 import PostMessage from '../models/postMessage.js'
 
 export const getPosts = async (request, response) => {

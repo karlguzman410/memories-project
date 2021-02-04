@@ -1,5 +1,6 @@
 //handler for our routes
 import mongoose from 'mongoose'
+import Post from '../../frontend/src/components/Posts/Post/Post.js'
 import PostMessage from '../models/postMessage.js'
 
 export const getPosts = async (request, response) => {
@@ -37,11 +38,28 @@ export const updatePost = async (request, response) => {
 }
 
 export const deletePost = async (request, response) => {
-    const {id} = request.params
-    if (!mongoose.Types.ObjectId.isValid(_id)) return response.status(404).send('No post with that id')
+    const { id } = request.params
+    if (!mongoose.Types.ObjectId.isValid(id)) return response.status(404).send('No post with that id')
 
     await PostMessage.findByIdAndRemove(id)
 
-    response.json({message: 'Post deleted successfully'})
+    console.log('DELETE')
 
+    response.json({ message: 'Post deleted successfully' })
+
+}
+
+export const likePost = async (request, response) => {
+    const { id } = request.params
+
+    //check if id is valid
+    if (!mongoose.Types.ObjectId.isValid(id)) return response.status(404).send('No post with that id')
+
+    //this returns a post
+    const post = await PostMessage.findById(id)
+
+    //pass in the updates. Increment the like count
+    const updatedPost = await PostMessage.findByIdAndUpdate(id, { likeCount: post.likeCount + 1 }, { new: true })
+
+    response.json(updatedPost)
 }

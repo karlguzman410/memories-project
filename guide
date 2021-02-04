@@ -1,0 +1,35 @@
+#my own internal 
+
+1. In the /backend, add the route in routes/posts.js
+    - router.delete('/:id', deletePost)
+
+2. Then, in the backend/controllers/posts, define the function call
+    - export const deletePost = async (request, response) => {
+    const {id} = request.params
+    if (!mongoose.Types.ObjectId.isValid(_id)) return response.status(404).send('No post with that id')
+
+    await PostMessage.findByIdAndRemove(id)
+
+    response.json({message: 'Post deleted successfully'})
+
+}
+
+3. In the frontend/api/index, add the api call
+    - export const deletePost = (id) => axios.delete(`${url}/${id}`)
+
+4. Define the action in the frontend/actions/posts.js
+    - export const deletePost = (id) => async (dispatch) => {
+    try {
+        await api.deletePost(id)
+        dispatch({ type: 'DELETE', payload: id })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+5. Add the action type in the reducer
+        - case "DELETE":
+            return posts.filter((post) => post._id !== action.payload)
+
+6. Call the function as needed
+        - onClick={() => dispatch(deletePost(post._id))}

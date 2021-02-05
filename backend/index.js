@@ -23,6 +23,11 @@ app.use(cors())
 //every route inside of postRoutes will start with 'posts'
 app.use('/posts', postRoutes)
 
+//greeting route
+app.get('/', (request, response) => {
+    response.send("Hello to memories API")
+})
+
 
 const PORT = process.env.PORT || 5000
 

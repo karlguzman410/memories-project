@@ -33,3 +33,21 @@
 
 6. Call the function as needed
         - onClick={() => dispatch(deletePost(post._id))}
+
+
+
+Part 3 - Signin/Login and Google authentication
+
+Setup:
+frontend/ 
+    - npm install jwt-decode react-google-Login
+
+backend/ 
+    - npm install bcryptjs jsonwebtoken
+
+Refactor:
+ frontend/App/src/components
+    - create a new component folder 'Navbar'
+    - In /components/Navbar , create a new file Navbar.js and styles.js
+
+ 

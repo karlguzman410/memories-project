@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import postRoutes from './routes/posts.js'
+import userRoutes from './routes/users.js'
 import dotenv from 'dotenv'
 
 const app = express()
@@ -22,6 +23,7 @@ app.use(cors())
 //1st param, set up starting path for all the routes inside postjs
 //every route inside of postRoutes will start with 'posts'
 app.use('/posts', postRoutes)
+app.use('/user', userRoutes)
 
 //greeting route
 app.get('/', (request, response) => {

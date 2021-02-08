@@ -51,14 +51,30 @@ export const deletePost = async (request, response) => {
 export const likePost = async (request, response) => {
     const { id } = request.params
 
-    //check if id is valid
+    //check for user authentication
+    if (!request.userId) return response.json({ message: "Unauthenticated" })
+
+    //check if post id is valid 
     if (!mongoose.Types.ObjectId.isValid(id)) return response.status(404).send('No post with that id')
 
     //this returns a post
     const post = await PostMessage.findById(id)
 
+    //check if userId is already in the like section
+    const index = post.likes.findIndex((id) => id === String(request.userId))
+
+    //if the userId is not found in the likes.id
+    if (index === -1) {
+        //like
+        post.likes.push(request.userId)
+    } else {
+        //delete the existing like from this userId
+        //filter returns all the likes besides the like from the current user (userId)
+        post.likes = post.likes.filter((id) => id !== String(request.userId))
+    }
+
     //pass in the updates. Increment the like count
-    const updatedPost = await PostMessage.findByIdAndUpdate(id, { likeCount: post.likeCount + 1 }, { new: true })
+    const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true })
 
     response.json(updatedPost)
 }

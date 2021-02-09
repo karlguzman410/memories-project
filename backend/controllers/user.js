@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken'
 import User from '../models/user.js'
 
 export const signin = async (request, response) => {
+    console.log('reached controller signin()')
     const { email, password } = request.body
     try {
         //check for existingUser
@@ -40,7 +41,7 @@ export const signup = async (request, response) => {
         const hashedPassword = await bcrypt.hash(password, 12)
 
         //create the user
-        const result = await User.create({ email, password: hashedPassword, name: `${firstName}, ${lastName}` })
+        const result = await User.create({ email, password: hashedPassword, name: `${firstName} ${lastName}` })
 
         //create the token
         const token = jwt.sign({ email: result.email, id: result._id }, 'test', { expiresIn: "1h" })

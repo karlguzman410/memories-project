@@ -6,12 +6,13 @@
 //if all the conditions below are met/verified, call the next() =>
 //like controller
 
-
-
-import jwt, { decode } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import jwt_decode from 'jwt-decode'
 
 const auth = async (request, response, next) => {
     try {
+
+        console.log(request.headers)
         //check for valid token
         const token = request.headers.authorization.split(" ")[1]
 
@@ -27,12 +28,12 @@ const auth = async (request, response, next) => {
             //username and id
             decodedData = jwt.verify(token, 'test')
 
-            request.userId = decodedData?.id
+            request.userId = decodedData.id
         } else {
             //else if token is Google Auth
             decodedData = jwt.decode(token)
             //sub -> google's name for a specific google id
-            request.userId = decodedData?.sub
+            request.userId = decodedData.sub
         }
 
         next()

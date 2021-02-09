@@ -16,10 +16,10 @@ export const getPosts = async (request, response) => {
 
 export const createPost = async (request, response) => {
     const post = request.body
-    const newPost = new PostMessage(post)
+    const newPostMessage = new PostMessage({ ...post, creator: request.userId, createdAt: new Date().toISOString() })
     try {
-        await newPost.save()
-        response.status(201).json(newPost)
+        await newPostMessage.save()
+        response.status(201).json(newPostMessage)
     } catch (error) {
         response.status(409).json({ message: error.message })
     }

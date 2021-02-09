@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from '@material-ui/core'
+import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core'
 import { GoogleLogin } from 'react-google-login'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { useDispatch } from 'react-redux'
@@ -32,11 +32,10 @@ const Auth = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        console.log(formData)
         if (isSignUp) {
-            dispatch: (signup(formData, history))
+            dispatch(signup(formData, history))
         } else {
-            dispatch: (signin(formData, history))
+            dispatch(signin(formData, history))
         }
     }
 
@@ -46,7 +45,7 @@ const Auth = () => {
 
     const switchMode = () => {
         setIsSignUp((prevIsSignUp) => !prevIsSignUp)
-        handleShowPassword(false)
+        setShowPassword(false)
     }
 
     const googleSuccess = async (response) => {

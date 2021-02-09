@@ -2,6 +2,7 @@ import React from "react"
 import useStyles from './styles'
 import { Card, CardActions, CardContent, CardMedia, Button, Typography } from '@material-ui/core'
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt'
+import ThumbUpAltOutlined from '@material-ui/icons/ThumbUpAltOutlined';
 import DeleteIcon from '@material-ui/icons/Delete'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import moment from 'moment'
@@ -15,6 +16,23 @@ import { likePost } from '../../../actions/posts.js'
 function Post({ post, setCurrentId }) {
     const classes = useStyles()
     const dispatch = useDispatch()
+
+    const user = JSON.parse(localStorage.getItem('profile'))
+
+    const Likes = () => {
+        if (post.likes.length > 0) {
+            return post.likes.find((like) => like === (user?.result?.googleId || user?.result?._id))
+                ? (
+                    <><ThumbUpAltIcon fontSize="small" />&nbsp;{post.likes.length > 2 ? `You and ${post.likes.length - 1} others` : `${post.likes.length} like${post.likes.length > 1 ? 's' : ''}`}</>
+                ) : (
+                    <><ThumbUpAltOutlined fontSize="small" />&nbsp;{post.likes.length} {post.likes.length > 1 ? 'Like' : 'Likes'}</>
+                )
+        }
+
+        console.log(post.likes.length)
+
+        return <><ThumbUpAltOutlined fontSize="small" />&nbsp;Like</>
+    }
 
     return (
         <Card className={classes.card}>
@@ -41,10 +59,8 @@ function Post({ post, setCurrentId }) {
                 <Typography variant="body2" color="textSecondary" component="p" gutterBottom>{post.message}</Typography>
             </CardContent>
             <CardActions className={classes.cardActions}>
-                <Button size="small" color="primary" onClick={() => dispatch(likePost(post._id))}>
-                    <ThumbUpAltIcon fontSize="small" />
-                    &nbsp; Like &nbsp;
-                    {post.likeCount}
+                <Button size="small" color="primary" disabled={!user?.result} onClick={() => dispatch(likePost(post._id))}>
+                    <Likes />
                 </Button>
                 <Button size="small" color="primary" onClick={() => dispatch(deletePost(post._id))}>
                     <DeleteIcon fontSize="small" />

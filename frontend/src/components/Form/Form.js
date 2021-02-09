@@ -17,8 +17,6 @@ const Form = ({ currentId, setCurrentId }) => {
 
     const user = JSON.parse(localStorage.getItem('profile'))
 
-    console.log(currentId)
-
     const [postData, setPostData] = useState({
         title: '',
         message: '',
